@@ -71,9 +71,57 @@ The runtime package used by hardware teleop is usually:
 ros2 launch spinnaker_camera_driver multiple_cameras.launch.py
 ```
 
-Install the Teledyne/FLIR Spinnaker SDK separately on the target machine. The SDK `.deb`, PySpin tarballs, and other large vendor archives should not be committed to this repo.
+Install the Teledyne/FLIR Spinnaker SDK separately on the target machine before building or running the FLIR camera driver.
+
+Official Spinnaker SDK download page:
+
+https://www.teledynevisionsolutions.com/products/spinnaker-sdk/?model=Spinnaker%20SDK&vertical=machine%20vision&segment=iis
+
+For Ubuntu 22.04 on x86_64, download the Linux/Ubuntu Spinnaker SDK package that matches the machine architecture and Python version you plan to use. The local development machine previously used Spinnaker `4.2.0.46` with Python 3.10 artifacts, but this repo intentionally does not commit the `.deb`, PySpin tarballs, or other large vendor archives.
+
+Typical install flow after downloading the SDK archive:
+
+```bash
+mkdir -p ~/Downloads/spinnaker
+cd ~/Downloads/spinnaker
+
+# Extract the downloaded Teledyne/FLIR archive here, then install the debs.
+# Exact filenames vary by SDK version.
+tar -xzf spinnaker-*-amd64-*.tar.gz
+cd spinnaker-*-amd64
+sudo apt install -y ./*.deb
+```
+
+If you also need PySpin:
+
+```bash
+python3 -m pip install --user numpy matplotlib pillow
+
+# Extract the PySpin archive from the SDK download, then install its wheel/tarball.
+# Exact filename varies by SDK version and Python ABI.
+python3 -m pip install --user ./spinnaker_python-*.tar.gz
+```
+
+After installing Spinnaker, apply USB/GigE camera permissions if the SDK installer did not already do it:
+
+```bash
+sudo usermod -aG video "$USER"
+sudo usermod -aG dialout "$USER"
+```
+
+Log out and back in after changing groups.
 
 After installing Spinnaker, verify camera visibility with the vendor tools first, then build this workspace.
+
+Useful checks:
+
+```bash
+SpinView
+lsusb
+ip link
+```
+
+For GigE cameras, make sure the camera network interface has the expected static IP/subnet and that jumbo frames are configured if your camera setup requires them.
 
 ## XSens MTi IMU/GNSS
 
