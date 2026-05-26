@@ -1,0 +1,6 @@
+radar_node:
+  ros__parameters:
+    # exact param name expected by the node:
+    can_channel_: "can0"
+    frame_id: "base_link"
+    use_sim_time: false

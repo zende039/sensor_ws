@@ -1,0 +1,44 @@
+# ROS 2 build artifacts
+build/
+install/
+log/
+.colcon/
+
+# Python/cache artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Native build products
+*.o
+*.d
+*.dpp
+*.a
+*.so
+*.so.*
+
+# Editor and OS noise
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+
+# Large local/vendor archives and installers
+Archive/
+*.bag
+*.db3
+*.mcap
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.deb
+spinnaker-*-amd64/
+
+# Runtime captures
+recorded_data/
+captures/
+logs/
