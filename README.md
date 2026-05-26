@@ -162,7 +162,7 @@ From the workspace root:
 ```bash
 cd ~/sensor_ws
 source /opt/ros/humble/setup.bash
-rosdep install --from-paths src --ignore-src -r -y
+./scripts/install_system_deps.sh
 colcon build --symlink-install
 source install/setup.bash
 ```
@@ -170,14 +170,7 @@ source install/setup.bash
 If you only need the camera, IMU, and NTRIP packages for teleop hardware mode:
 
 ```bash
-colcon build --symlink-install \
-  --packages-up-to \
-  spinnaker_camera_driver \
-  spinnaker_synchronized_camera_driver \
-  flir_camera_msgs \
-  flir_camera_description \
-  xsens_mti_ros2_driver \
-  ntrip
+./scripts/build_core_sensors.sh
 ```
 
 ## Teleop Integration
@@ -186,7 +179,7 @@ The `gopher-tele-op-pipeline` hardware branch expects these packages to be avail
 
 ```bash
 source /opt/ros/humble/setup.bash
-source ~/sensor_ws/install/setup.bash
+source ~/Projects/sensor_ws/install/setup.bash
 ```
 
 Hardware mode starts:
@@ -198,6 +191,31 @@ ros2 launch xsens_mti_ros2_driver xsens_mti_node.launch.py
 ```
 
 If those launches work manually, the teleop vehicle startup can use the same environment.
+
+Fresh machine layout expected by the hardware teleop scripts:
+
+```text
+~/Projects/
+├── gopher-tele-op-pipeline/
+└── sensor_ws/
+```
+
+The vehicle-side first-time teleop startup can clone/update and build this repo automatically:
+
+```bash
+cd ~/Projects/gopher-tele-op-pipeline
+./start_ue_1st_time.sh <ran_host:50051>
+```
+
+Manual setup is:
+
+```bash
+mkdir -p ~/Projects
+git clone https://github.com/zende039/sensor_ws.git ~/Projects/sensor_ws
+cd ~/Projects/sensor_ws
+./scripts/build_core_sensors.sh
+source install/setup.bash
+```
 
 ## Quick Checks
 
