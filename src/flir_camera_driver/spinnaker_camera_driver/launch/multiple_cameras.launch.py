@@ -82,7 +82,7 @@ def make_camera_node(name, camera_type, serial):
 
 def launch_setup(context, *args, **kwargs):
     container = ComposableNodeContainer(
-        name='stereo_camera_container',  # You can rename this to multi_camera_container
+        name='two_camera_container',
         namespace='',
         package='rclcpp_components',
         executable='component_container',
@@ -96,11 +96,6 @@ def launch_setup(context, *args, **kwargs):
                 LaunchConfig('cam_1_name'),
                 LaunchConfig('cam_1_type').perform(context),
                 LaunchConfig('cam_1_serial'),
-            ),
-            make_camera_node(
-                LaunchConfig('cam_2_name'),
-                LaunchConfig('cam_2_type').perform(context),
-                LaunchConfig('cam_2_serial'),
             ),
         ],
         output='screen',
@@ -123,28 +118,17 @@ def generate_launch_description():
                 default_value=['cam_1'],
                 description='camera name (ros node name) of camera 1',
             ),
-            LaunchArg(
-                'cam_2_name',
-                 default_value=['cam_2'],
-                 description='camera name (ros node name) of camera 2',
-            ),
             LaunchArg('cam_0_type', default_value='blackfly_s', description='type of camera 0'),
             LaunchArg('cam_1_type', default_value='blackfly_s', description='type of camera 1'),
-            LaunchArg('cam_2_type', default_value='blackfly_s', description='type of camera 2'),
             LaunchArg(
                 'cam_0_serial',
-                default_value="'21025855'",
+                default_value="'24203520'",
                 description='FLIR serial number of camera 0 (in quotes!!)',
             ),
             LaunchArg(
                 'cam_1_serial',
-                default_value="'21023389'",
+                default_value="'23195569'",
                 description='FLIR serial number of camera 1 (in quotes!!)',
-            ),
-            LaunchArg(
-                'cam_2_serial',
-                default_value="'21027952'",  # Replace with your actual serial
-                description='FLIR serial number of camera 2 (in quotes!!)',
             ),
 
             OpaqueFunction(function=launch_setup),
